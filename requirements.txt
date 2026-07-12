@@ -7,3 +7,4 @@ pypdf
 python-dotenv
 pyyaml
 pytest
+markitdown[pdf]
