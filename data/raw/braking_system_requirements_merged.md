@@ -1,0 +1,296 @@
+# Braking System Requirements Specification
+
+## 1. Scope
+
+This document specifies synthetic but realistic requirements for automotive braking systems, covering both legacy hydraulic architectures and modern brake-by-wire one-box electro-hydraulic architectures. The scope includes service braking, parking braking, ABS, ESC, EPB, regenerative braking coordination, diagnostics, degraded modes, and functional safety requirements aligned with common automotive braking and safety practices.[web:6][web:7][web:17][web:22]
+
+The document is written as a pure requirements specification. It excludes RAG ingestion guidance, chunking strategy, retrieval examples, and corpus-structuring content that is not part of the braking system specification itself.[file:32][file:33]
+
+## 2. System Overview
+
+A legacy hydraulic brake system uses a brake pedal, booster, master cylinder, hydraulic lines, and wheel-end friction brakes to convert driver input into braking torque. ABS and ESC functions are typically implemented through an ECU and hydraulic modulation components connected into the hydraulic circuit.[web:13][web:14][web:15][web:30]
+
+A brake-by-wire one-box system replaces or decouples the direct mechanical/hydraulic pedal-to-wheel path and interprets driver demand through sensors, electronic control logic, and an integrated electro-hydraulic actuator unit. Such systems commonly integrate service braking, ABS, ESC, traction control, and coordination with regenerative braking in electrified vehicles.[web:18][web:21][web:23][web:28]
+
+## 3. Architectural Description
+
+### 3.1 Legacy Hydraulic Architecture
+
+The legacy architecture shall comprise the following primary elements:[web:13][web:14][web:15]
+
+- Brake pedal and mechanical linkage.
+- Vacuum or hydraulic brake booster.
+- Tandem master cylinder.
+- Dual hydraulic circuits.
+- Wheel-end disc or drum brake actuators.
+- Wheel speed sensing and hydraulic modulation components for ABS/ESC-equipped variants.
+
+### 3.2 Brake-by-Wire One-Box Architecture
+
+The one-box brake-by-wire architecture shall comprise the following primary elements:[web:18][web:21][web:28]
+
+- Brake pedal module with redundant sensing.
+- Pedal feel simulator.
+- Central brake ECU or integrated control electronics.
+- Electro-hydraulic pressure generation unit.
+- Individually controlled hydraulic output paths for wheel brakes.
+- Pressure, wheel-speed, and system-status sensing.
+- Interfaces to ADAS, powertrain, and vehicle dynamics controllers.
+
+## 4. Definitions
+
+- **Service Brake:** Primary braking function used to decelerate or stop the vehicle during driving.[web:7]
+- **Parking Brake:** Function intended to hold the vehicle stationary under specified loading and gradient conditions.[web:7]
+- **ABS:** Anti-lock Braking System used to prevent wheel lock during braking.[web:6][web:8]
+- **ESC/ESP:** Electronic Stability Control function used to stabilize vehicle yaw behavior through selective braking interventions.[web:30][web:6]
+- **EPB:** Electric Parking Brake.[web:18][web:28]
+- **BBW:** Brake-by-wire braking architecture using electrical/electronic interpretation of brake demand and electronically commanded brake actuation.[web:23][web:28]
+- **EHB:** Electro-hydraulic braking implementation of brake-by-wire.[web:18][web:28]
+- **HARA:** Hazard Analysis and Risk Assessment within the ISO 26262 safety lifecycle.[web:17][web:22]
+- **ASIL:** Automotive Safety Integrity Level defined by ISO 26262.[web:17][web:22]
+
+## 5. System-Level Requirements
+
+**REQ-SYS-001 – Service Brake Provision**  
+The vehicle shall provide a service brake system capable of controlled deceleration and stopping across the full operating range of the vehicle, including specified laden and unladen conditions.[web:7][web:11]
+
+**REQ-SYS-002 – Parking Brake Provision**  
+The vehicle shall provide a parking brake function capable of holding the vehicle stationary under specified gradient and load conditions in both forward and reverse directions.[web:7][web:11]
+
+**REQ-SYS-003 – Stability Support Functions**  
+Where equipped, the braking system shall support ABS and ESC functions without compromising the availability of the base braking function.[web:6][web:30]
+
+**REQ-SYS-004 – Residual Braking**  
+The braking system shall provide residual braking capability under defined single-point failure conditions so that total loss of braking does not occur after a single failure in the service brake path.[web:7][web:25]
+
+**REQ-SYS-005 – Functional Safety Lifecycle**  
+Electrical and electronic braking functions shall be developed in accordance with the ISO 26262 functional safety lifecycle, including item definition, HARA, safety goals, and derived technical safety requirements.[web:17][web:22]
+
+## 6. Legacy Hydraulic Requirements
+
+### 6.1 Functional Requirements
+
+**REQ-LG-001 – Hydraulic Service Braking**  
+The legacy braking system shall use hydraulic pressure generated by a master cylinder to actuate wheel-end friction brakes.[web:13][web:15]
+
+**REQ-LG-002 – Dual Circuit Design**  
+The service brake shall use at least two hydraulic circuits arranged such that loss of one circuit does not eliminate all service braking capability.[web:7][web:25]
+
+**REQ-LG-003 – Brake Booster Assistance**  
+The legacy system shall use a vacuum booster or hydraulic booster to reduce required pedal effort during normal braking.[web:14][web:15][web:5]
+
+**REQ-LG-004 – Proportional Pedal Response**  
+Pedal force and travel shall produce predictable and approximately proportional hydraulic braking response over the normal operating range.[web:5][web:13]
+
+**REQ-LG-005 – Pressure Generation Capacity**  
+The master cylinder and booster combination shall generate sufficient pressure to meet required braking performance under worst-case loading and temperature conditions.[web:5][web:7]
+
+**REQ-LG-006 – Booster Failure Operation**  
+Loss of booster assistance shall not prevent service braking; the driver shall retain the ability to achieve a defined minimum braking performance using increased pedal effort.[web:5][web:15]
+
+**REQ-LG-007 – Hydraulic Failure Warning**  
+The system shall warn the driver upon detection of significant hydraulic circuit degradation, pressure loss, or brake fluid loss affecting braking performance.[web:7][web:25]
+
+**REQ-LG-008 – ABS/ESC Compatibility**  
+In ABS- or ESC-equipped variants, the hydraulic architecture shall permit modulation by valves and control logic without degrading baseline hydraulic brake operation when electronic functions are unavailable.[web:6][web:30]
+
+### 6.2 Performance and Robustness Requirements
+
+**REQ-LG-020 – Brake Fade Resistance**  
+The legacy system shall maintain required braking performance after repeated high-energy braking events within defined thermal operating limits.[web:6][web:9]
+
+**REQ-LG-021 – Environmental Robustness**  
+The hydraulic braking system shall maintain functional performance under environmental exposure to water, dust, road contaminants, and expected temperature extremes.[web:6][web:21]
+
+**REQ-LG-022 – Parking Brake Retention**  
+The legacy parking brake shall provide a mechanical or mechanically retained holding function such that loss of hydraulic pressure or electrical supply does not release the vehicle unintentionally.[web:7][web:10]
+
+## 7. ABS and ESC Requirements
+
+**REQ-ABS-001 – Wheel Speed Acquisition**  
+The braking control system shall acquire wheel speed information from all instrumented wheels at a sampling rate sufficient to detect impending lock-up in time for closed-loop pressure modulation.[file:32][web:6]
+
+**REQ-ABS-002 – Anti-Lock Pressure Modulation**  
+When wheel slip exceeds control thresholds, the ABS function shall modulate individual wheel brake pressure to reduce lock-up risk and preserve steerability.[web:6][web:30]
+
+**REQ-ABS-003 – Wheel Speed Sensor Diagnostics**  
+The system shall continuously monitor wheel speed sensor electrical plausibility and signal integrity and shall detect open-circuit, short-circuit, stuck, and implausible sensor conditions.[file:32][web:25]
+
+**REQ-ABS-004 – ABS Degraded Operation**  
+Upon detection of an ABS fault that prevents reliable anti-lock control, the system shall disable ABS interventions and maintain conventional base braking capability while issuing a driver warning.[file:32][web:25]
+
+**REQ-ESC-001 – Vehicle Stability Control**  
+The ESC function shall selectively apply wheel brake interventions to mitigate unstable yaw behavior when sensed vehicle motion deviates beyond calibrated stability thresholds.[web:30][file:32]
+
+**REQ-ESC-002 – Brake and Torque Coordination**  
+The ESC function shall coordinate wheel braking requests with powertrain torque reduction requests where such interface is available.[file:32][web:30]
+
+**REQ-ESC-003 – ESC Fault Handling**  
+Loss of ESC function shall not degrade the base service brake function and shall trigger an appropriate driver indication.[web:25][file:32]
+
+## 8. Electric Parking Brake Requirements
+
+**REQ-EPB-001 – Electric Parking Actuation**  
+Where an EPB is provided, the parking brake shall be actuated by an electric mechanism capable of applying and holding the brake under specified load and gradient conditions.[web:18][web:28]
+
+**REQ-EPB-002 – Overcurrent Protection**  
+The EPB actuator control shall detect sustained motor overcurrent or overload conditions and transition to a fault state to prevent thermal or mechanical damage.[file:32]
+
+**REQ-EPB-003 – Status Monitoring**  
+The EPB function shall monitor actuator position, current, or equivalent state variables to confirm successful apply and release actions.[file:32]
+
+**REQ-EPB-004 – Fault Indication**  
+Failure of the EPB to apply, release, or maintain holding force shall be indicated to the driver and logged by diagnostics.[file:32]
+
+## 9. Brake-by-Wire One-Box Requirements
+
+### 9.1 Functional Requirements
+
+**REQ-BBW-001 – Decoupled Brake Demand Sensing**  
+The one-box brake-by-wire system shall interpret driver brake demand using redundant electrical sensing of pedal position, force, or equivalent pedal input variables.[web:18][web:23][web:28]
+
+**REQ-BBW-002 – Pedal Feel Simulation**  
+The system shall provide a pedal feel simulator that reproduces stable and repeatable pedal feedback independent of direct wheel-circuit hydraulic pressure.[web:18][web:28]
+
+**REQ-BBW-003 – Electro-Hydraulic Pressure Generation**  
+The one-box unit shall generate brake pressure electro-hydraulically and distribute commanded pressure to the wheel brakes without requiring a conventional vacuum booster for normal operation.[web:18][web:21][web:28]
+
+**REQ-BBW-004 – Integrated Dynamics Functions**  
+The one-box architecture shall support integrated ABS, ESC, and traction-related brake interventions through a shared electro-hydraulic unit.[web:18][web:21][web:30]
+
+**REQ-BBW-005 – Full Vehicle Braking Capability**  
+The brake-by-wire system shall generate sufficient brake pressure on all controlled wheels to satisfy vehicle-level stopping and stability requirements under normal operating conditions.[web:18][web:28]
+
+**REQ-BBW-006 – Redundant Pressure Path or Channel Strategy**  
+The one-box braking architecture shall implement redundancy or equivalent fault-tolerant measures such that a single failure in sensing, actuation, or pressure generation does not immediately result in total loss of service braking.[file:32][web:23][web:25]
+
+**REQ-BBW-007 – Autonomous Brake Request Acceptance**  
+The brake ECU shall accept braking requests from authorized ADAS functions, including AEB, subject to safety arbitration and brake system availability.[web:12][web:29]
+
+**REQ-BBW-008 – Safe Degraded Operation**  
+The one-box system shall detect internal faults and enter a degraded operating state that preserves a defined minimum braking capability and prevents hazardous unintended braking.[web:16][web:23][web:25]
+
+### 9.2 Detailed Control Requirements
+
+**REQ-BBW-020 – Redundant Pedal Sensor Plausibility**  
+Redundant pedal sensor channels shall be cross-checked for plausibility, and discrepancies beyond calibrated limits shall trigger a safe-state or degraded-mode response.[file:32][web:23]
+
+**REQ-BBW-021 – Wheel Pressure Control**  
+The one-box unit shall independently control hydraulic pressure at each controlled wheel to support anti-lock braking, stability control, and torque-vectoring-related brake interventions where applicable.[web:21][web:30]
+
+**REQ-BBW-022 – Demand-to-Deceleration Mapping**  
+During normal operation, the brake-by-wire control software shall map driver brake demand to target deceleration and wheel pressure commands with stable and predictable vehicle response.[web:18][web:28]
+
+**REQ-BBW-023 – Regenerative Braking Coordination**  
+In electrified vehicles, the braking controller shall coordinate regenerative and friction braking so that total deceleration tracks driver demand while maintaining stability, brake feel consistency, and fallback braking capability.[web:18][web:28]
+
+**REQ-BBW-024 – Low-Speed Blending Transition**  
+The braking controller shall manage regenerative-to-friction blending transitions, particularly at low vehicle speeds and high deceleration requests, to avoid perceivable braking discontinuities beyond calibrated limits.[web:28][file:33]
+
+## 10. Diagnostic Requirements
+
+**REQ-DIAG-001 – Fault Detection Coverage**  
+The braking system shall detect faults affecting sensors, actuators, communication, power supply, and pressure generation that could compromise braking performance or safety functions.[web:16][web:25]
+
+**REQ-DIAG-002 – Diagnostic Trouble Codes**  
+Detected faults shall be recorded using structured diagnostic trouble code entries or equivalent diagnostic identifiers that uniquely identify the failed subsystem or failure mode.[file:32]
+
+**REQ-DIAG-003 – Startup Self-Test**  
+The brake control electronics shall perform startup self-tests on critical sensing, actuation, memory, and monitoring functions prior to enabling normal control.[file:32][web:16]
+
+**REQ-DIAG-004 – Continuous Runtime Monitoring**  
+The braking controller shall perform runtime monitoring of watchdog status, communication integrity, power supply validity, sensor plausibility, and actuator response.[file:32][web:16]
+
+**REQ-DIAG-005 – Fault Memory Storage**  
+Upon occurrence of a safety-relevant fault, the system shall store sufficient diagnostic context in non-volatile memory to support post-event analysis and service diagnostics.[file:32]
+
+**REQ-DIAG-006 – Driver Warning Strategy**  
+Faults that affect braking performance, safety functions, or parking brake availability shall be communicated to the driver through tell-tales, messages, or equivalent HMI means.[web:7][web:25][file:32]
+
+## 11. Functional Safety Requirements
+
+**REQ-FS-001 – Safety Goal Definition**  
+Vehicle-level safety goals shall be defined for hazards including loss of braking, insufficient braking, unintended braking, asymmetric braking, and loss of directional stability during braking.[web:16][web:24][web:25]
+
+**REQ-FS-002 – HARA Execution**  
+A Hazard Analysis and Risk Assessment shall be performed for all safety-relevant braking functions, including legacy electronically controlled subfunctions and brake-by-wire functions.[web:17][web:22][web:23]
+
+**REQ-FS-003 – ASIL Allocation**  
+Safety goals and derived safety requirements shall be assigned ASIL classifications in accordance with ISO 26262 based on severity, exposure, and controllability.[web:17][web:22]
+
+**REQ-FS-004 – Technical Safety Requirements**  
+System, hardware, and software technical safety requirements shall be derived from the safety goals and allocated to the relevant architectural elements.[web:16][web:22][web:25]
+
+**REQ-FS-005 – Safe State Definition**  
+For each identified safety-relevant fault class, the braking system shall define and implement a safe state or degraded state that minimizes unreasonable risk.[web:16][web:24][web:29]
+
+**REQ-FS-006 – Freedom from Interference**  
+Safety-relevant braking software and hardware elements shall be protected from interference by lower-integrity functions sharing computational or communication resources.[web:17][web:22]
+
+**REQ-FS-007 – Monitoring and Fault Reaction Time**  
+Safety mechanisms shall detect and react to faults within time intervals consistent with the fault-tolerant time interval derived during safety analysis.[web:16][web:22]
+
+## 12. Performance Requirements
+
+**REQ-PF-001 – Stopping Performance**  
+The braking system shall meet vehicle-category-specific stopping distance and deceleration performance requirements under prescribed test conditions.[web:6][web:7][web:11]
+
+**REQ-PF-002 – Mean Fully Developed Deceleration**  
+Where required by applicable standards, the braking system shall achieve minimum mean fully developed deceleration values during performance tests.[web:11][web:6]
+
+**REQ-PF-003 – Straight-Line Stability**  
+The braking system shall maintain straight-line stability during high deceleration events on uniform and split-friction surfaces within defined controllability limits.[web:6][web:30]
+
+**REQ-PF-004 – Cornering Stability Support**  
+When integrated stability functions are enabled, braking interventions shall support controllable vehicle behavior during braking in cornering scenarios.[web:30][web:21]
+
+**REQ-PF-005 – Fade and Recovery**  
+The braking system shall retain required minimum performance during fade testing and shall recover braking effectiveness after cooling within specified limits.[web:6][web:9]
+
+**REQ-PF-006 – Power Supply Robustness for BBW**  
+Brake-by-wire functions shall maintain required operating capability across specified supply voltage ranges and defined transient disturbances.[web:16][web:22]
+
+## 13. Interface Requirements
+
+**REQ-IF-001 – Vehicle Network Interface**  
+Electronically controlled braking functions shall exchange status, fault, and torque or deceleration coordination signals with other vehicle controllers over defined communication interfaces.[file:32][web:30]
+
+**REQ-IF-002 – ADAS Interface**  
+The braking system shall support authenticated and validated brake requests from ADAS functions such as AEB when those features are part of the vehicle item definition.[web:12][web:29]
+
+**REQ-IF-003 – Diagnostic Interface**  
+The braking controller shall support service diagnostic access to fault memory, status variables, and calibration-relevant information subject to vehicle cybersecurity and service constraints.[file:32][web:16]
+
+## 14. Requirement Relationships
+
+The following requirement relationships are part of the specification and shall be maintained as explicit engineering traceability within the requirements set.[file:32][file:33]
+
+- **REQ-SYS-001** is refined by **REQ-LG-001**, **REQ-BBW-003**, **REQ-PF-001**, and **REQ-PF-002**.
+- **REQ-SYS-002** is refined by **REQ-LG-022**, **REQ-EPB-001**, and **REQ-PF-001**.
+- **REQ-SYS-003** is refined by **REQ-ABS-002**, **REQ-ESC-001**, and **REQ-BBW-004**.
+- **REQ-SYS-004** is refined by **REQ-LG-002**, **REQ-LG-006**, **REQ-BBW-006**, and **REQ-BBW-008**.
+- **REQ-SYS-005** is refined by **REQ-FS-001** through **REQ-FS-007**.
+- **REQ-ABS-003** supports **REQ-DIAG-001**, **REQ-DIAG-002**, and **REQ-FS-005**.
+- **REQ-ABS-004** depends on **REQ-ABS-003** and supports **REQ-SYS-004**.
+- **REQ-ESC-003** depends on **REQ-DIAG-006** and supports **REQ-SYS-003**.
+- **REQ-BBW-001** is refined by **REQ-BBW-020** and supports **REQ-BBW-022**.
+- **REQ-BBW-003** is refined by **REQ-BBW-021** and supports **REQ-PF-001**.
+- **REQ-BBW-006** supports **REQ-FS-004**, **REQ-FS-005**, and **REQ-SYS-004**.
+- **REQ-BBW-023** is complemented by **REQ-BBW-024** and supports **REQ-PF-001** and **REQ-PF-004**.
+- **REQ-DIAG-003** and **REQ-DIAG-004** support **REQ-FS-007**.
+- **REQ-FS-005** constrains **REQ-ABS-004**, **REQ-ESC-003**, and **REQ-BBW-008**.
+- **REQ-PF-006** constrains all brake-by-wire requirements from **REQ-BBW-001** through **REQ-BBW-024**.
+
+## 15. Comparative Summary
+
+| Topic | Legacy Hydraulic | Brake-by-Wire One-Box |
+|---|---|---|
+| Brake demand path | Mechanical pedal plus hydraulic pressure generation.[web:13][web:14] | Electrical demand sensing plus electro-hydraulic actuation.[web:18][web:23][web:28] |
+| Assistance method | Vacuum or hydraulic booster.[web:14][web:15] | Integrated electro-hydraulic pressure generation.[web:18][web:21] |
+| Base failure focus | Hydraulic leakage, booster loss, mechanical retention, sensor faults in adjunct functions.[web:25][web:15] | Sensor plausibility, ECU faults, power supply robustness, pressure generation faults, fail-operational behavior.[web:16][web:23][web:25] |
+| Regenerative coordination | Not typically applicable in conventional architecture.[web:6] | Explicit friction/regen blending required in electrified platforms.[web:18][web:28] |
+| Safety complexity | Lower E/E coupling in base service brake path.[web:25] | High E/E dependency requiring stronger functional safety architecture.[web:16][web:22] |
+
+## 16. Document Constraints
+
+All requirement IDs in this specification are synthetic and intended for engineering, validation, and information-retrieval experimentation. They are realistic in style but are not lifted from any OEM proprietary specification.[file:32][file:33]
