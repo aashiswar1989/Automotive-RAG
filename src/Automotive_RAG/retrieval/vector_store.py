@@ -19,10 +19,10 @@ from pathlib import Path
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 
-from src.Automotive_RAG.embeddings.ollama_embedder import get_embedding_model
-from src.Automotive_RAG.chunking.md_splitter import chunk_by_headers
+from Automotive_RAG.embeddings.ollama_embedder import get_embedding_model
+from Automotive_RAG.chunking.md_splitter import chunk_by_headers
 
-PERSIST_DIR = "data/chroma_db"
+PERSIST_DIR = "data/vectorstore"
 
 
 def build_vector_store(chunks: list[Document], collection_name: str) -> Chroma:
