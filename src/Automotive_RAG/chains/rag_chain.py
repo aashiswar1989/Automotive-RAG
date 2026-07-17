@@ -16,6 +16,7 @@ Four steps, piped in sequence with the '|' operator:
 Each step's OUTPUT becomes the next step's INPUT. That's the whole idea.
 """
 
+from langchain_core.vectorstores import VectorStoreRetriever
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
@@ -49,15 +50,13 @@ def format_chunks(chunks) -> str:
     return "\n\n".join(chunk.page_content for chunk in chunks)
 
 
-def build_rag_chain(collection_name: str, k: int = 3):
-    store = load_vector_store(collection_name)
-    retriever = store.as_retriever(search_kwargs={"k": k})
+def build_rag_chain(model:str, temperature: float, retriever: VectorStoreRetriever):
 
     prompt = ChatPromptTemplate.from_messages([
         ("system", SYSTEM_PROMPT),
         ("human", HUMAN_PROMPT),
     ])
-    llm = ChatOllama(model=LLM_MODEL_NAME, temperature=0)
+    llm = ChatOllama(model=model, temperature=temperature)
     output_parser = StrOutputParser()
 
     chain = (
@@ -76,10 +75,10 @@ if __name__ == "__main__":
     # Run this yourself locally -- needs Ollama running with both
     # nomic-embed-text AND llama3.1:8b pulled, and the vector store
     # already built (step 4's script).
-    chain = build_rag_chain(collection_name="markdown_header_chunks")
+    # chain = build_rag_chain(collection_name="markdown_header_chunks")
 
     question = "What happens if the EPB actuator detects sustained motor overcurrent?"
-    answer = chain.invoke(question)
+    # answer = chain.invoke(question)
 
-    print(f"Q: {question}")
-    print(f"A: {answer}")
+    # print(f"Q: {question}")
+    # print(f"A: {answer}")

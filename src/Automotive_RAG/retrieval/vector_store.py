@@ -25,25 +25,23 @@ from Automotive_RAG.chunking.md_splitter import chunk_by_headers
 PERSIST_DIR = "data/vectorstore"
 
 
-def build_vector_store(chunks: list[Document], collection_name: str) -> Chroma:
-    embedding_model = get_embedding_model()
+def build_vector_store(chunks: list[Document], embedding_model, collection_name: str, persist_dir: str) -> Chroma:
 
     store = Chroma.from_documents(
         documents=chunks,
         embedding=embedding_model,
         collection_name=collection_name,
-        persist_directory=PERSIST_DIR,
+        persist_directory=persist_dir,
     )
     return store
 
 
-def load_vector_store(collection_name: str) -> Chroma:
-    embedding_model = get_embedding_model()
+def load_vector_store(collection_name: str, embedding_model: str, persist_dir: str) -> Chroma:
 
     store = Chroma(
         collection_name=collection_name,
         embedding_function=embedding_model,
-        persist_directory=PERSIST_DIR,
+        persist_directory=persist_dir,
     )
     return store
 

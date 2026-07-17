@@ -12,18 +12,16 @@ through every file that touches embeddings.
 
 from langchain_ollama import OllamaEmbeddings
 
-EMBEDDING_MODEL_NAME = "nomic-embed-text"
 
-
-def get_embedding_model():
-    return OllamaEmbeddings(model=EMBEDDING_MODEL_NAME)
+def get_embedding_model(model: str):
+    return OllamaEmbeddings(model=model)
 
 
 if __name__ == "__main__":
     # Quick manual check: embed one sentence, look at the result.
     # Run this yourself locally -- it needs Ollama running with
     # nomic-embed-text pulled (`ollama pull nomic-embed-text`).
-    model = get_embedding_model()
+    model = get_embedding_model(model = 'nomic-embed-text')
     vector = model.embed_query("What does REQ-BBW-023 require?")
     print(f"vector length: {len(vector)}")
     print(f"first 5 numbers: {vector[:5]}")

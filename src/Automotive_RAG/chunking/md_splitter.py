@@ -30,7 +30,7 @@ HEADERS_TO_SPLIT_ON = [
 ]
 
 
-def chunk_by_headers(text: str, max_chars: int = 700) -> list:
+def chunk_by_headers(text: str, max_chars: int = 700, chunk_overlap: int = 50) -> list:
     # Step 1: cut on headers.
     header_splitter = MarkdownHeaderTextSplitter(
         headers_to_split_on=HEADERS_TO_SPLIT_ON,
@@ -41,7 +41,7 @@ def chunk_by_headers(text: str, max_chars: int = 700) -> list:
     # Step 2: cut anything still too long, by character count.
     char_splitter = RecursiveCharacterTextSplitter(
         chunk_size=max_chars,
-        chunk_overlap=50,
+        chunk_overlap=chunk_overlap,
     )
     final_chunks = char_splitter.split_documents(header_chunks)
 
@@ -59,6 +59,8 @@ if __name__ == "__main__":
     print(f"avg length: {sum(lengths) / len(lengths):.0f} chars")
     print(f"min/max length: {min(lengths)} / {max(lengths)}")
 
-    print("\n--- sample chunk ---")
-    print(f"metadata: {chunks[10].metadata}")
-    print(chunks[10].page_content)
+    for i in [1,6,10,45,60]:
+        print("\n--- sample chunk ---")
+        print(f"metadata: {chunks[i].metadata}")
+        print(chunks[i].page_content)
+        print('-'*50)

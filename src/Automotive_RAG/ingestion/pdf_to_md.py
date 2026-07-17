@@ -111,13 +111,13 @@ def to_markdown(raw: str) -> str:
     return text.strip() + "\n"
 
 
-def convert(pdf_path: Path, out_path: Path) -> Path:
+def convert(pdf_path: Path, md_path: Path) -> Path:
     md_engine = MarkItDown()
     result = md_engine.convert(str(pdf_path))
     markdown = to_markdown(result.text_content)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(markdown, encoding="utf-8")
-    return out_path
+    md_path.parent.mkdir(parents=True, exist_ok=True)
+    md_path.write_text(markdown, encoding="utf-8")
+    return md_path
 
 
 if __name__ == "__main__":
